@@ -15,9 +15,9 @@ export default {
   tokenExpireTime: process.env.TOKEN_EXPIRE_TIME || '1d',
   pg: {
     host: process.env.PG_HOST,
-    port: process.env.PG_PORT,
-    user: process.env.PG_USER,
+    port: parseInt(process.env.PG_PORT, 10),
+    username: process.env.PG_USER,
     password: process.env.PG_PASSWORD,
-    dbName: process.env.PG_DATRABASE,
+    database: process.env.PG_DATABASE,
   },
 };
