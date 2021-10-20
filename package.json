@@ -24,7 +24,7 @@
     "seed:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config .seeds.env migration:revert",
     "migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run",
     "migration:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:revert",
-    "migration:create": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config .env migration:create"
+    "migration:create": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:create"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
