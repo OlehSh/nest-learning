@@ -137,7 +137,7 @@ export class addGeoPointTable1634738785543 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('geopoints-collections');
-    await queryRunner.dropTable('collections');
     await queryRunner.dropTable('geolocation_points');
+    await queryRunner.dropTable('collections');
   }
 }
