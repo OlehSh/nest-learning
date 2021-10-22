@@ -1,16 +1,10 @@
 import { createConnection } from 'typeorm';
-import conf from '../config/env';
+import { ConnectionOptions } from 'typeorm';
+import conf from '../config/db';
 
-const { typeORM } = conf;
 export const pgProvider = [
   {
     provide: 'DATABASE_CONNECTION',
-    useFactory: async () =>
-      await createConnection({
-        type: 'postgres',
-        entities: ['dist/**/*.entity{.ts,.js}'],
-        // synchronize: true,
-        ...typeORM,
-      }),
+    useFactory: async () => await createConnection(conf as ConnectionOptions),
   },
 ];
