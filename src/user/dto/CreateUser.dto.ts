@@ -25,7 +25,6 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  // @Equals(CreateUserDto['password'])
   @EqualToField('password')
   repeatPassword: string;
 }

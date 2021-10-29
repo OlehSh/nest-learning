@@ -62,5 +62,4 @@ export class updateDateColumnType1634824038629 implements MigrationInterface {
     await queryRunner.changeColumns('collections', changedColumns);
     await queryRunner.changeColumns('geolocation_points', changedColumns);
   }
-
 }
