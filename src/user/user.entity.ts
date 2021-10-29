@@ -1,3 +1,4 @@
+import { USER_ROLE } from './userConstants';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
@@ -17,6 +18,6 @@ export class User {
   @Column({ select: false, length: 255 })
   password: string;
 
-  @Column({ type: 'smallint' })
-  role: number;
+  @Column({ type: 'varchar', enum: USER_ROLE })
+  role: string;
 }

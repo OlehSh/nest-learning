@@ -15,7 +15,8 @@ export class UserService {
   async createUser(user: CreateUserDto): Promise<User> {
     try {
       const newUser = this.userRepository.create(user);
-      return this.userRepository.save(newUser);
+      const savedUser: User = await this.userRepository.save(newUser);
+      return this.userRepository.findOne(savedUser.id);
     } catch (e) {
       throw new HttpException(
         e.message || 'Server Error',
