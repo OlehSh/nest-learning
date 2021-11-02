@@ -1,6 +1,11 @@
 export default () => ({
   port: process.env.PORT || 3000,
   mode: process.env.MODE || 'PRODUCTION',
+  saltRounds: process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 12,
+  jwt: {
+    secret: process.env.JWT_SECRET || 'secret',
+    expiresIn: process.env.JWT_EXPIERS_IN || '1h',
+  },
   db: {
     type: process.env.TYPEORM_CONNECTION || 'postgres',
     host: process.env.TYPEORM_HOST || 'localhost',

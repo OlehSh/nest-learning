@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import configuration from './config/configuration';
-// import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(configuration().port);
+  const configService = app.get<ConfigService>(ConfigService);
+  await app.listen(configService.get('port'));
 }
 void bootstrap();

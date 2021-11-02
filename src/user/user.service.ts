@@ -1,8 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/CreateUser.dto';
-import { LoginUserDto } from './dto/LoginUser.dto';
 import constants from '../constants/constants';
 
 @Injectable()
@@ -25,9 +24,10 @@ export class UserService {
     }
   }
 
-  async login(loginData: LoginUserDto): Promise<string> {
-    const user = await this.userRepository.findOne({ email: loginData.email });
-    console.log(user);
-    return 'token';
+  async getOne(
+    findParams: Pick<User, 'email'> | Pick<User, 'id'>,
+    options?: FindOneOptions,
+  ): Promise<User> {
+    return this.userRepository.findOne(findParams, options);
   }
 }
