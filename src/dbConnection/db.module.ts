@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { pgProvider } from './providers/pg.provider';
+import { pgProvider } from './pg.provider';
 
 @Module({
   providers: [...pgProvider],
