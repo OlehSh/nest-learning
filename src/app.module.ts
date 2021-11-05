@@ -4,6 +4,8 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './dbConnection/db.module';
 import { CryptoModule } from './crypto/crypto.module';
+import { LocationController } from './location/location.controller';
+import { LocationModule } from './location/location.module';
 import configuration from './config/configuration';
 
 @Global()
@@ -14,8 +16,9 @@ import configuration from './config/configuration';
     UserModule,
     DatabaseModule,
     CryptoModule,
+    LocationModule,
   ],
-  controllers: [],
+  controllers: [LocationController],
   providers: [ConfigService],
 })
 export class AppModule {}
