@@ -11,17 +11,17 @@ import {
   ParamData,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { CreateLocationDto } from './dto/CreateLocation.dto';
+import { CreateLocationBodyDto } from './dto/CreateLocationBodyDto.dto';
 
 @Controller('location')
-export class LocationController {
+export class GeolocationController {
   @Get('/')
   getLocations(@Query() query: { search?: string }) {
     return { locations: [] };
   }
 
   @Post('/')
-  add(@Body() locationBody: CreateLocationDto) {
+  add(@Body() locationBody: CreateLocationBodyDto) {
     return { data: {} };
   }
 
