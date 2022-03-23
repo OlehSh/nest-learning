@@ -1,4 +1,11 @@
-import { IsIn, IsNotEmpty, IsArray, IsString, Length } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsIn,
+  IsNotEmpty,
+  IsString,
+  Length,
+} from 'class-validator';
 import { GEOLOCATION_TYPE } from '../geoloaction.constants';
 
 export class CreateLocationBodyDto {
@@ -9,10 +16,15 @@ export class CreateLocationBodyDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsIn([GEOLOCATION_TYPE])
+  @IsIn([
+    GEOLOCATION_TYPE.POINT,
+    GEOLOCATION_TYPE.LINESTRING,
+    GEOLOCATION_TYPE.POLYGON,
+  ])
   locationType: string;
 
   @IsArray()
   @IsNotEmpty()
+  @ArrayNotEmpty()
   coordinates: string[];
 }

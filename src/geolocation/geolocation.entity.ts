@@ -11,7 +11,10 @@ export class Geolocation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'geography' })
+  @Column({ type: 'varchar', length: 100 })
+  name: string;
+
+  @Column({ type: 'geography', srid: 4326 })
   location: string;
 
   @Column({ type: 'varchar', length: 100 })

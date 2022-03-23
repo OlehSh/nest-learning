@@ -11,7 +11,7 @@ export class changeGeolocationColumnType1635934672121
 
   private newColumn = new TableColumn({
     name: 'location',
-    type: 'geography(POINT, 4326)',
+    type: 'geography',
     isNullable: false,
   });
 
