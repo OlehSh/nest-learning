@@ -15,7 +15,7 @@ export class UserService {
     try {
       const newUser = this.userRepository.create(user);
       const savedUser: User = await this.userRepository.save(newUser);
-      return this.userRepository.findOne(savedUser.id);
+      return this.userRepository.findOne({ where: { id: savedUser.id } });
     } catch (e) {
       throw new HttpException(
         e.message || 'Server Error',
@@ -24,10 +24,7 @@ export class UserService {
     }
   }
 
-  async getOne(
-    findParams: Pick<User, 'email'> | Pick<User, 'id'>,
-    options?: FindOneOptions,
-  ): Promise<User> {
-    return this.userRepository.findOne(findParams, options);
+  async getOne(options: FindOneOptions): Promise<User> {
+    return this.userRepository.findOne(options);
   }
 }
