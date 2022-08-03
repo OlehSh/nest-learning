@@ -23,6 +23,6 @@ export class GeolocationService {
     };
     const location: Geolocation = this.locationRepository.create(locationData);
     await this.locationRepository.save(location);
-    return this.locationRepository.findOne(location.id);
+    return this.locationRepository.findOne({ where: { id: location.id } });
   }
 }

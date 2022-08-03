@@ -27,9 +27,10 @@ export class AuthController {
   ): Promise<{ accessToken: string; user: Partial<User> }> {
     const { email, password } = loginData;
     const options: FindOneOptions = {
+      where: { email },
       select: ['id', 'email', 'password', 'firstname', 'lastname'],
     };
-    const user = await this.userService.getOne({ email }, options);
+    const user = await this.userService.getOne(options);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
@@ -41,7 +42,8 @@ export class AuthController {
   }
 
   @Post('/signup')
-  signup(@Body() createUserData: CreateUserDto): any {
+  signup(@Body() createUserData: CreateUserDto): Promise<Partial<User>> {
+    console.log('==================', createUserData);
     createUserData.password = this.cryptoService.getHash(
       createUserData.password,
     );
