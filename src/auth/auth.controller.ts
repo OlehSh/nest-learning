@@ -43,7 +43,6 @@ export class AuthController {
 
   @Post('/signup')
   signup(@Body() createUserData: CreateUserDto): Promise<Partial<User>> {
-    console.log('==================', createUserData);
     createUserData.password = this.cryptoService.getHash(
       createUserData.password,
     );
