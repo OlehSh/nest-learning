@@ -3,7 +3,6 @@ import { CreateLocationBodyDto } from './dto/CreateLocationBodyDto.dto';
 import { Geolocation } from './geolocation.entity';
 import { Repository } from 'typeorm';
 import constants from '../constants/constants';
-import { GEOLOCATION_TYPE } from './geoloaction.constants';
 
 @Injectable()
 export class GeolocationService {
@@ -13,16 +12,20 @@ export class GeolocationService {
   ) {}
 
   async createLocation(data: CreateLocationBodyDto): Promise<Geolocation> {
-    const { name, locationType, coordinates } = data;
-    const joinSeparator = locationType === GEOLOCATION_TYPE.POLYGON ? ' ' : ',';
-    const locationData: Partial<Geolocation> = {
-      name,
-      location_type: data.locationType,
-      // location: `${data.locationType}(${data.coordinates.join(joinSeparator)})`,
-      location: "{ type: 'point', coordinates: ['36.231200', '50.006015'] }",
-    };
-    const location: Geolocation = this.locationRepository.create(locationData);
-    await this.locationRepository.save(location);
-    return this.locationRepository.findOne({ where: { id: location.id } });
+    try {
+      const { name, locationType, coordinates } = data;
+      const locationData: Partial<Geolocation> = {
+        name,
+        location_type: locationType,
+        location: { type: locationType, coordinates },
+      };
+      //   .execute();
+      const location: Geolocation = await this.locationRepository.create(locationData);
+      await this.locationRepository.save(location);
+      return this.locationRepository.findOne({ where: { id: location.id } });
+    } catch (e) {
+      // console.error(e);
+      throw new Error('Error on location save');
+    }
   }
 }

@@ -25,22 +25,16 @@ export class GeolocationController {
   @Get('/')
   @UseGuards(JwtAuthGuard)
   getLocations(@Query() query: { search?: string }, @Req() req: AuthRequest) {
-    console.log('Request ===============>', req.user);
     return { locations: [] };
   }
 
   @Post('/')
   @UseGuards(JwtAuthGuard)
-  create(@Body() locationBody: CreateLocationBodyDto) {
+  async create(@Body() locationBody: CreateLocationBodyDto) {
     try {
-      const location = this.geolocationService.createLocation(locationBody);
-      console.log('LOCATION', location);
-      return { data: {} };
+      return this.geolocationService.createLocation(locationBody);
     } catch (e: any) {
-      throw new HttpException(
-        e.message || errorConst.ServerErrorMessage,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -50,10 +44,7 @@ export class GeolocationController {
     try {
       return { data: {} };
     } catch (e) {
-      throw new HttpException(
-        e.message || errorConst.ServerErrorMessage,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -63,10 +54,7 @@ export class GeolocationController {
     try {
       return { message: 'deleted', data: params };
     } catch (e) {
-      throw new HttpException(
-        e.message || errorConst.ServerErrorMessage,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

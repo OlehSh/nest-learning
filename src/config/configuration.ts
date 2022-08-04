@@ -14,17 +14,9 @@ export default () => ({
     username: process.env.TYPEORM_USERNAME || 'user',
     password: process.env.TYPEORM_PASSWORD || '',
     database: process.env.TYPEORM_DATABASE || '',
-    synchronize:
-      process.env.TYPEORM_SYNCHRONIZE &&
-      process.env.TYPEORM_SYNCHRONIZE.toLowerCase() === 'true',
-    logging:
-      process.env.TYPEORM_LOGGING &&
-      process.env.TYPEORM_LOGGING.toLowerCase() === 'true',
-    entities: process.env.TYPEORM_ENTITIES
-      ? [process.env.TYPEORM_ENTITIES]
-      : ['dist/**/*.entity.js'],
-    migrations: process.env.TYPEORM_MIGRATIONS
-      ? [process.env.TYPEORM_MIGRATIONS]
-      : ['dist/migrations/*.js'],
+    synchronize: process.env.TYPEORM_SYNCHRONIZE && process.env.TYPEORM_SYNCHRONIZE.toLowerCase() === 'true',
+    logging: process.env.TYPEORM_LOGGING && process.env.TYPEORM_LOGGING.toLowerCase() === 'true',
+    entities: process.env.TYPEORM_ENTITIES ? [process.env.TYPEORM_ENTITIES] : ['dist/**/*.entity.js'],
+    migrations: process.env.TYPEORM_MIGRATIONS ? [process.env.TYPEORM_MIGRATIONS] : ['dist/migrations/*.js'],
   },
 });

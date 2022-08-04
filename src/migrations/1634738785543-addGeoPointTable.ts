@@ -1,9 +1,4 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export class addGeoPointTable1634738785543 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

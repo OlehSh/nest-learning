@@ -17,10 +17,7 @@ export class UserService {
       const savedUser: User = await this.userRepository.save(newUser);
       return this.userRepository.findOne({ where: { id: savedUser.id } });
     } catch (e) {
-      throw new HttpException(
-        e.message || 'Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e.message || 'Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

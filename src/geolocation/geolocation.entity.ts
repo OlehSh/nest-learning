@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('geolocations')
 export class Geolocation {
@@ -15,7 +9,7 @@ export class Geolocation {
   name: string;
 
   @Column({ type: 'geography', srid: 4326 })
-  location: string;
+  location: { type: string; coordinates: string[] | number[] };
 
   @Column({ type: 'varchar', length: 100 })
   location_type: string;
