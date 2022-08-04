@@ -4,7 +4,7 @@ export default () => ({
   saltRounds: process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 12,
   jwt: {
     secret: process.env.JWT_SECRET || 'secret',
-    expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+    expiresIn: process.env.JWT_EXPIRES_IN || '15m',
   },
   db: {
     type: process.env.TYPEORM_CONNECTION || 'postgres',

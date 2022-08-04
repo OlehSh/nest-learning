@@ -11,21 +11,26 @@ import {
   ParamData,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { AuthRequest } from '../auth/interfaces/AuthRequest';
 import { CreateLocationBodyDto } from './dto/CreateLocationBodyDto.dto';
 import { GeolocationService } from './geolocation.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import errorConst from '../constants/error.constants';
 
 @Controller('geolocation')
 export class GeolocationController {
   constructor(private geolocationService: GeolocationService) {}
   @Get('/')
-  getLocations(@Query() query: { search?: string }) {
+  @UseGuards(JwtAuthGuard)
+  getLocations(@Query() query: { search?: string }, @Req() req: AuthRequest) {
+    console.log('Request ===============>', req.user);
     return { locations: [] };
   }
 
   @Post('/')
+  @UseGuards(JwtAuthGuard)
   create(@Body() locationBody: CreateLocationBodyDto) {
     try {
       const location = this.geolocationService.createLocation(locationBody);
@@ -40,7 +45,8 @@ export class GeolocationController {
   }
 
   @Put('/:id')
-  update(@Req() req: Request) {
+  @UseGuards(JwtAuthGuard)
+  update(@Req() req: AuthRequest) {
     try {
       return { data: {} };
     } catch (e) {
@@ -52,6 +58,7 @@ export class GeolocationController {
   }
 
   @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
   delete(@Param() params: ParamData) {
     try {
       return { message: 'deleted', data: params };
