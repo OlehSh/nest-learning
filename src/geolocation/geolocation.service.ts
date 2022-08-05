@@ -19,12 +19,10 @@ export class GeolocationService {
         location_type: locationType,
         location: { type: locationType, coordinates },
       };
-      //   .execute();
       const location: Geolocation = await this.locationRepository.create(locationData);
       await this.locationRepository.save(location);
       return this.locationRepository.findOne({ where: { id: location.id } });
     } catch (e) {
-      // console.error(e);
       throw new Error('Error on location save');
     }
   }
