@@ -26,4 +26,19 @@ export class GeolocationService {
       throw new Error('Error on location save');
     }
   }
+  async find(fields: Partial<Geolocation>, raw: string): Promise<Geolocation[]> {
+    try {
+      const queryBuilder = this.locationRepository.createQueryBuilder('geolocations');
+      if (fields) {
+        queryBuilder.where(fields);
+      }
+      if (raw) {
+        queryBuilder.andWhere(raw);
+      }
+      return queryBuilder.execute();
+    } catch (e) {
+      console.error(e);
+      throw new Error('Error on location find');
+    }
+  }
 }
