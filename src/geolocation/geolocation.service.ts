@@ -3,6 +3,16 @@ import { CreateLocationBodyDto } from './dto/CreateLocationBodyDto.dto';
 import { Geolocation } from './geolocation.entity';
 import { Repository } from 'typeorm';
 import constants from '../constants/constants';
+import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
+
+type radiusFilterI = {
+  radius: number;
+  point: number[];
+};
+
+type pointFilterI = {
+  polygon: number[];
+};
 
 @Injectable()
 export class GeolocationService {
@@ -26,14 +36,24 @@ export class GeolocationService {
       throw new Error('Error on location save');
     }
   }
-  async find(fields: Partial<Geolocation>, raw: string): Promise<Geolocation[]> {
+  find(fields: Partial<Geolocation>, filter?: radiusFilterI | pointFilterI): Promise<Geolocation[]> {
     try {
-      const queryBuilder = this.locationRepository.createQueryBuilder('geolocations');
+      let queryBuilder: SelectQueryBuilder<Geolocation> = this.locationRepository.createQueryBuilder('geolocations');
       if (fields) {
-        queryBuilder.where(fields);
+        queryBuilder = queryBuilder.where(fields);
       }
-      if (raw) {
-        queryBuilder.andWhere(raw);
+      if (filter) {
+        if ('radius' in filter) {
+          const [long, lat] = filter?.point;
+          queryBuilder = queryBuilder.andWhere(
+            `ST_DWithin(st_makepoint(${long}, ${lat}), location, ${filter.radius}) = true`,
+          );
+        } else if ('polygon' in filter) {
+          queryBuilder = queryBuilder.andWhere(`ST_Intersects(
+            ST_GeomFromGeoJSON('{"type": "Polygon", "coordinates": [${JSON.stringify(filter.polygon)}]}'),
+            location
+          ) = true`);
+        }
       }
       return queryBuilder.execute();
     } catch (e) {

@@ -24,15 +24,11 @@ export class GeolocationController {
   constructor(private geolocationService: GeolocationService) {}
   @Get('/')
   @UseGuards(JwtAuthGuard)
-  getLocations(@Query() query: { fields?: string; distance?: string; point: string }, @Req() req: AuthRequest) {
+  getLocations(@Query() query: { fields?: string; filter?: string }, @Req() req: AuthRequest) {
     try {
-      const fields = query.fields ? JSON.parse(query.fields) : null;
-      const { distance, point } = query;
-      const [long, lat] = JSON.parse(point);
-      return this.geolocationService.find(
-        fields,
-        `ST_DWithin(st_makepoint(${long}, ${lat}), location, ${distance}) = true`,
-      );
+      const fields = query.fields ? JSON.parse(query.fields) : undefined;
+      const filter = query.filter ? JSON.parse(query.filter) : undefined;
+      return this.geolocationService.find(fields, filter);
     } catch (e: any) {
       throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
