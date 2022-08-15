@@ -1,8 +1,8 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository} from '@nestjs/typeorm';
 import { CreateLocationBodyDto } from './dto/CreateLocationBodyDto.dto';
 import { Geolocation } from './geolocation.entity';
 import { Repository } from 'typeorm';
-import constants from '../constants/constants';
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 
 type radiusFilterI = {
@@ -17,7 +17,7 @@ type pointFilterI = {
 @Injectable()
 export class GeolocationService {
   constructor(
-    @Inject(constants.GEOLOCATION_REPOSITORY)
+    @InjectRepository(Geolocation)
     private locationRepository: Repository<Geolocation>,
   ) {}
 

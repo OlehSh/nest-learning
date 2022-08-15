@@ -1,8 +1,16 @@
 import { Module } from '@nestjs/common';
-import { pgProvider } from './pg.provider';
+import { DataSourceOptions } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  providers: [...pgProvider],
-  exports: [...pgProvider],
+  imports: [
+    TypeOrmModule.forRootAsync({
+      useFactory: async (configService: ConfigService) => configService.get('db') as DataSourceOptions,
+      inject: [ConfigService],
+    }),
+  ],
+  // providers: [],
+  // exports: [],
 })
 export class DatabaseModule {}

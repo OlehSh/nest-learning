@@ -1,13 +1,13 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
+import { InjectRepository} from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/CreateUser.dto';
-import constants from '../constants/constants';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(constants.USER_REPOSITORY)
+    @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
 

@@ -7,11 +7,12 @@ import { DatabaseModule } from './dbConnection/db.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { GeolocationModule } from './geolocation/geolocation.module';
 import configuration from './config/configuration';
+import { AppController } from './app.controller';
 
 @Global()
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
+    ConfigModule.forRoot({ isGlobal: true,  load: [configuration] }),
     PassportModule,
     AuthModule,
     UserModule,
@@ -19,7 +20,7 @@ import configuration from './config/configuration';
     CryptoModule,
     GeolocationModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [ConfigService],
   exports: [DatabaseModule],
 })
