@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository} from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateLocationBodyDto } from './dto/CreateLocationBodyDto.dto';
 import { Geolocation } from './geolocation.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 
 type radiusFilterI = {
@@ -59,6 +59,36 @@ export class GeolocationService {
     } catch (e) {
       console.error(e);
       throw new Error('Error on location find');
+    }
+  }
+  async update(id: string, data: Partial<CreateLocationBodyDto>): Promise<Geolocation> {
+    try {
+      const location = await this.locationRepository.findOne({ where: { id } });
+      const { name, coordinates } = data;
+      if (!location) {
+        throw new Error('Location not found');
+      }
+      const partialEntry = {
+        name,
+        location: undefined,
+      };
+      if (coordinates) {
+        partialEntry.location = {
+          type: location.location_type,
+          coordinates,
+        };
+      }
+      await this.locationRepository.update({ id }, partialEntry);
+      return this.locationRepository.findOne({ where: { id } });
+    } catch (e) {
+      throw new Error('Error on location update');
+    }
+  }
+  delete(id: string): Promise<DeleteResult> {
+    try {
+      return this.locationRepository.delete({ id });
+    } catch (e) {
+      throw new Error('Error on location delete');
     }
   }
 }
