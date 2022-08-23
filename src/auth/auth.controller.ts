@@ -1,10 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Body, Controller, Post, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/CreateUser.dto';
 import { LoginUserDto } from './dto/LoginUser.dto';
 import { UserService } from '../user/user.service';
@@ -22,9 +16,7 @@ export class AuthController {
   ) {}
 
   @Post('/login')
-  async login(
-    @Body() loginData: LoginUserDto,
-  ): Promise<{ accessToken: string; user: Partial<User> }> {
+  async login(@Body() loginData: LoginUserDto): Promise<{ accessToken: string; user: Partial<User> }> {
     const { email, password } = loginData;
     const options: FindOneOptions = {
       where: { email },
@@ -43,9 +35,7 @@ export class AuthController {
 
   @Post('/signup')
   signup(@Body() createUserData: CreateUserDto): Promise<Partial<User>> {
-    createUserData.password = this.cryptoService.getHash(
-      createUserData.password,
-    );
+    createUserData.password = this.cryptoService.getHash(createUserData.password);
     return this.userService.createUser(createUserData);
   }
 }

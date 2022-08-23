@@ -5,15 +5,12 @@ import {
   Query,
   Body,
   Put,
-  Req,
   Delete,
   Param,
-  ParamData,
   HttpException,
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { AuthRequest } from '../auth/interfaces/AuthRequest';
 import { CreateLocationBodyDto } from './dto/CreateLocationBodyDto.dto';
 import { GeolocationService } from './geolocation.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -24,49 +21,50 @@ export class GeolocationController {
   constructor(private geolocationService: GeolocationService) {}
   @Get('/')
   @UseGuards(JwtAuthGuard)
-  getLocations(@Query() query: { search?: string }, @Req() req: AuthRequest) {
-    console.log('Request ===============>', req.user);
-    return { locations: [] };
+  getLocations(@Query() query: { fields?: string; filter?: string }) {
+    try {
+      const fields = query.fields ? JSON.parse(query.fields) : undefined;
+      const filter = query.filter ? JSON.parse(query.filter) : undefined;
+      return this.geolocationService.find(fields, filter);
+    } catch (e: any) {
+      throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Post('/')
   @UseGuards(JwtAuthGuard)
-  create(@Body() locationBody: CreateLocationBodyDto) {
+  async create(@Body() locationBody: CreateLocationBodyDto) {
     try {
-      const location = this.geolocationService.createLocation(locationBody);
-      console.log('LOCATION', location);
-      return { data: {} };
+      return this.geolocationService.createLocation(locationBody);
     } catch (e: any) {
-      throw new HttpException(
-        e.message || errorConst.ServerErrorMessage,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Put('/:id')
+  @Put(':id')
   @UseGuards(JwtAuthGuard)
-  update(@Req() req: AuthRequest) {
+  update(@Param('id') id: string, @Body() body: Partial<CreateLocationBodyDto>) {
     try {
-      return { data: {} };
+      return this.geolocationService.update(id, body);
     } catch (e) {
-      throw new HttpException(
-        e.message || errorConst.ServerErrorMessage,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  delete(@Param() params: ParamData) {
+  async delete(@Param('id') id: string): Promise<string> {
     try {
-      return { message: 'deleted', data: params };
+      const { affected } = await this.geolocationService.delete(id);
+      if (affected === 0) {
+        throw new HttpException('Locatiuon not found', HttpStatus.NOT_FOUND);
+      }
+      return 'OK';
     } catch (e) {
-      throw new HttpException(
-        e.message || errorConst.ServerErrorMessage,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (e instanceof HttpException) {
+        throw e;
+      }
+      throw new HttpException(e.message || errorConst.ServerErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

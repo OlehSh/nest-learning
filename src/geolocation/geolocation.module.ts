@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { GeolocationService } from './geolocation.service';
-import { GeolocationProviders } from './geolocation.providers';
 import { GeolocationController } from './geolocation.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Geolocation } from './geolocation.entity';
 
 @Module({
-  imports: [],
-  providers: [GeolocationService, ...GeolocationProviders],
+  imports: [TypeOrmModule.forFeature([Geolocation])],
+  providers: [GeolocationService],
   controllers: [GeolocationController],
 })
 export class GeolocationModule {}

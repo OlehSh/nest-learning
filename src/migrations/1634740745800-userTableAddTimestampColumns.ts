@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
-export class userTableAddTimestampColumns1634740745800
-  implements MigrationInterface
-{
+export class userTableAddTimestampColumns1634740745800 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
       'users',

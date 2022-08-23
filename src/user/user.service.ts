@@ -1,13 +1,13 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
+import { InjectRepository} from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/CreateUser.dto';
-import constants from '../constants/constants';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(constants.USER_REPOSITORY)
+    @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
 
@@ -17,10 +17,7 @@ export class UserService {
       const savedUser: User = await this.userRepository.save(newUser);
       return this.userRepository.findOne({ where: { id: savedUser.id } });
     } catch (e) {
-      throw new HttpException(
-        e.message || 'Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e.message || 'Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
