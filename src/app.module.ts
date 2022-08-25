@@ -12,7 +12,7 @@ import { AppController } from './app.controller';
 @Global()
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true,  load: [configuration] }),
+    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     PassportModule,
     AuthModule,
     UserModule,

@@ -20,7 +20,7 @@ export class AuthController {
     const { email, password } = loginData;
     const options: FindOneOptions = {
       where: { email },
-      select: ['id', 'email', 'password', 'firstname', 'lastname'],
+      select: ['id', 'email', 'role', 'password', 'firstname', 'lastname'],
     };
     const user = await this.userService.getOne(options);
     if (!user) {
